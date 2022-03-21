@@ -6,7 +6,7 @@
 /*   By: plehtika <plehtika@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 11:06:54 by plehtika          #+#    #+#             */
-/*   Updated: 2022/03/17 11:05:25 by plehtika         ###   ########.fr       */
+/*   Updated: 2022/03/21 18:37:39 by plehtika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,68 @@ int	check_builder_side(agent_info_t info, int row)
 	if (info.bee == 3 && (row == 12 || row == 13))
 		return (1);
 	return (0);
+}
+
+coords_t	find_builder_spot(agent_info_t info)
+{
+	if (info.player == 0)
+	{
+		if (info.bee == 1)
+		{
+			if (info.row == 11 && info.col == 28)
+				return (coords_t) {
+					.row = -1,
+					.col = -1
+			};
+			return (coords_t) {
+				.row = 11,
+				.col = 28
+			};
+		}
+		if (info.bee == 3)
+		{
+			if (info.row == 13 && info.col == 28)
+				return (coords_t) {
+					.row = -1,
+					.col = -1
+			};
+			return (coords_t) {
+				.row = 13,
+				.col = 28
+			};
+		}
+	}
+	if (info.player == 1)
+	{
+		if (info.bee == 1)
+		{
+			if (info.row == 11 && info.col == 1)
+				return (coords_t) {
+					.row = -1,
+					.col = -1
+			};
+			return (coords_t) {
+				.row = 11,
+				.col = 1
+			};
+		}
+		if (info.bee == 3)
+		{
+			if (info.row == 13 && info.col == 1)
+				return (coords_t) {
+					.row = -1,
+					.col = -1
+			};
+			return (coords_t) {
+				.row = 13,
+				.col = 1
+			};
+		}
+	}
+	return (coords_t) {
+		.row = -1,
+		.col = -1
+	};
 }
 
 coords_t	find_closest_wall_spot(agent_info_t info, int map[25][30])
@@ -151,6 +213,8 @@ int	check_empty_direction(agent_info_t info, int direction)
 		}
 		range++;
 	}
+	if (range == 5)
+		return (-1);
 	return (new_direction);
 }
 
@@ -257,6 +321,18 @@ command_t	forager_bee(agent_info_t info, int map[25][30])
 		}
 	}
 	flower = find_closest_flower(info, map);
+	int opponent = info.player ^ 1;
+	int	flower_dir = direction_to_target(info, flower);
+	int	wall_dir = find_neighbour(info, WALL);
+	if (wall_dir >= 0 && (wall_dir == flower_dir || flower_dir == find_neighbour(info, hive_cell(info.player))
+	|| flower_dir == find_neighbour(info, bee_cell(opponent, 0))) && check_empty_direction(info, flower_dir) == -1)
+		// && is_target_near(info, hive_cell(info.player)) == 1)
+	{
+		return (command_t) {
+			.action = GUARD,
+			.direction = wall_dir
+		};
+	}
 	return (command_t) {
 		.action = MOVE,
 		.direction = check_empty_direction(info, direction_to_target(info, flower))
@@ -342,7 +418,7 @@ command_t	destroyer_bee(agent_info_t info, int map[25][30])
 
 command_t	builder_bee(agent_info_t info, int map[25][30])
 {
-	coords_t	wall_spot;
+	coords_t	builder_spot;
 
 	if (info.bee == 1)
 	{
@@ -402,21 +478,27 @@ command_t	builder_bee(agent_info_t info, int map[25][30])
 				};
 		}
 	}
+	builder_spot = find_builder_spot(info);
+	if (builder_spot.row != -1)
+		return (command_t) {
+		.action = MOVE,
+		.direction = check_empty_direction(info, direction_to_target(info, builder_spot))
+	};
 	int spot_dir = find_neighbour_wall_spot(info, map);
 	if (spot_dir >= 0)
 		return (command_t) {
 		.action = BUILD,
 		.direction = spot_dir
 	};
-	wall_spot = find_closest_wall_spot(info, map);
-	if (wall_spot.row != -1)
-		return (command_t) {
-		.action = MOVE,
-		.direction = check_empty_direction(info, direction_to_target(info, wall_spot))
-	};
 	int opponent = info.player ^ 1;
+	int	enemy_bee = find_neighbour(info, bee_cell(opponent, 1));
+	if (enemy_bee >= 0)
+		return (command_t) {
+		.action = GUARD,
+		.direction = enemy_bee
+	};
 	return (command_t) {
-	.action = GUARD,
-	.direction = find_neighbour(info, bee_cell(opponent, 1))
+	.action = MOVE,
+	.direction = find_neighbour(info, hive_cell(opponent))
 	};
 }

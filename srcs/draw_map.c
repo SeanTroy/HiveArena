@@ -6,7 +6,7 @@
 /*   By: plehtika <plehtika@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 11:03:18 by plehtika          #+#    #+#             */
-/*   Updated: 2022/03/17 11:05:28 by plehtika         ###   ########.fr       */
+/*   Updated: 2022/03/21 15:37:24 by plehtika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,16 @@ void	mask_opponent_hive(int map[25][30], agent_info_t info)
 	{
 		if (map[11][27] == EMPTY || map[11][27] == OUTSIDE)
 			map[11][27] = WALLSPOT;
-		if (map[11][28] == EMPTY || map[11][28] == OUTSIDE)
-			map[11][28] = WALLSPOT;
+		// if (map[11][28] == EMPTY || map[11][28] == OUTSIDE)
+		// 	map[11][28] = WALLSPOT;
 		if (map[11][29] == EMPTY || map[11][29] == OUTSIDE)
 			map[11][29] = WALLSPOT;
 		if (map[12][27] == EMPTY || map[12][27] == OUTSIDE)
 			map[12][27] = WALLSPOT;
 		if (map[13][27] == EMPTY || map[13][27] == OUTSIDE)
 			map[13][27] = WALLSPOT;
-		if (map[13][28] == EMPTY || map[13][28] == OUTSIDE)
-			map[13][28] = WALLSPOT;
+		// if (map[13][28] == EMPTY || map[13][28] == OUTSIDE)
+		// 	map[13][28] = WALLSPOT;
 		if (map[13][29] == EMPTY || map[13][29] == OUTSIDE)
 			map[13][29] = WALLSPOT;
 		return;
@@ -52,16 +52,16 @@ void	mask_opponent_hive(int map[25][30], agent_info_t info)
 	{
 		if (map[11][0] == EMPTY || map[11][0] == OUTSIDE)
 			map[11][0] = WALLSPOT;
-		if (map[11][1] == EMPTY || map[11][1] == OUTSIDE)
-			map[11][1] = WALLSPOT;
+		// if (map[11][1] == EMPTY || map[11][1] == OUTSIDE)
+		// 	map[11][1] = WALLSPOT;
 		if (map[11][2] == EMPTY || map[11][2] == OUTSIDE)
 			map[11][2] = WALLSPOT;
 		if (map[12][2] == EMPTY || map[12][2] == OUTSIDE)
 			map[12][2] = WALLSPOT;
 		if (map[13][0] == EMPTY || map[13][0] == OUTSIDE)
 			map[13][0] = WALLSPOT;
-		if (map[13][1] == EMPTY || map[13][1] == OUTSIDE)
-			map[13][1] = WALLSPOT;
+		// if (map[13][1] == EMPTY || map[13][1] == OUTSIDE)
+		// 	map[13][1] = WALLSPOT;
 		if (map[13][2] == EMPTY || map[13][2] == OUTSIDE)
 			map[13][2] = WALLSPOT;
 		return;

@@ -6,7 +6,7 @@
 /*   By: plehtika <plehtika@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 11:06:54 by plehtika          #+#    #+#             */
-/*   Updated: 2022/03/21 18:37:39 by plehtika         ###   ########.fr       */
+/*   Updated: 2022/03/22 14:43:29 by plehtika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,8 +213,6 @@ int	check_empty_direction(agent_info_t info, int direction)
 		}
 		range++;
 	}
-	if (range == 5)
-		return (-1);
 	return (new_direction);
 }
 
@@ -325,7 +323,7 @@ command_t	forager_bee(agent_info_t info, int map[25][30])
 	int	flower_dir = direction_to_target(info, flower);
 	int	wall_dir = find_neighbour(info, WALL);
 	if (wall_dir >= 0 && (wall_dir == flower_dir || flower_dir == find_neighbour(info, hive_cell(info.player))
-	|| flower_dir == find_neighbour(info, bee_cell(opponent, 0))) && check_empty_direction(info, flower_dir) == -1)
+	|| flower_dir == find_neighbour(info, bee_cell(opponent, 0)))) /*DO WE NEED TO CHECK FOR EMPTY ROUTE?*/
 		// && is_target_near(info, hive_cell(info.player)) == 1)
 	{
 		return (command_t) {

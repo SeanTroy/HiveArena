@@ -6,7 +6,7 @@
 /*   By: plehtika <plehtika@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 10:50:41 by plehtika          #+#    #+#             */
-/*   Updated: 2022/03/21 19:16:17 by plehtika         ###   ########.fr       */
+/*   Updated: 2022/03/22 14:52:36 by plehtika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -412,7 +412,7 @@ command_t	think(agent_info_t info)
 		hive_dir = direction_to_target(info, home_hive);
 		int	wall_dir = find_neighbour(info, WALL);
 		if (wall_dir >= 0 && (wall_dir == hive_dir || hive_dir == find_neighbour(info, bee_cell(opponent, 0)))
-			&& is_target_near(info, hive_cell(info.player)) == 1)
+			&& is_target_near(info, hive_cell(opponent)) == -1)
 		{
 			return (command_t) {
 				.action = GUARD,

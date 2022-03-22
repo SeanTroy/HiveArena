@@ -6,7 +6,7 @@
 /*   By: plehtika <plehtika@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 10:50:41 by plehtika          #+#    #+#             */
-/*   Updated: 2022/03/22 15:22:05 by plehtika         ###   ########.fr       */
+/*   Updated: 2022/03/22 16:06:31 by plehtika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -479,7 +479,7 @@ int	main(int argc, char **argv)
 
 	char	*host = argv[1];
 	int		port = atoi(argv[2]);
-	char	*team_name = "Wall Builders";
+	char	*team_name = "Deep Blue C";
 
 	agent_main(host, port, team_name, think);
 }

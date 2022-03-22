@@ -6,7 +6,7 @@
 /*   By: plehtika <plehtika@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 11:06:54 by plehtika          #+#    #+#             */
-/*   Updated: 2022/03/22 14:43:29 by plehtika         ###   ########.fr       */
+/*   Updated: 2022/03/22 15:14:58 by plehtika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,6 +186,38 @@ coords_t	find_closest_wall_spot(agent_info_t info, int map[25][30])
 	};
 }
 
+int	are_you_stuck(agent_info_t info, int direction)
+{
+	coords_t	center = {VIEW_DISTANCE, VIEW_DISTANCE};
+	coords_t	target;
+	int			new_direction;
+	int			range;
+
+	target = direction_to_coords(center, direction);
+	new_direction = direction;
+	range = 1;
+	while (info.cells[target.row][target.col] != EMPTY && range < 5)
+	{
+		new_direction = direction - range; /* for example E -> NE */
+		if (new_direction < 0)
+			new_direction = 7; /* NW */
+		target = direction_to_coords(center, new_direction);
+		if (info.cells[target.row][target.col] == EMPTY)
+			break;
+		else
+		{
+			new_direction = direction + range; /* for example E -> SE */
+			if (new_direction > 7)
+				new_direction = 0; /* N */
+			target = direction_to_coords(center, new_direction);
+		}
+		range++;
+	}
+	if (range == 5)
+		return (-1);
+	return (new_direction);
+}
+
 int	check_empty_direction(agent_info_t info, int direction)
 {
 	coords_t	center = {VIEW_DISTANCE, VIEW_DISTANCE};
@@ -319,11 +351,9 @@ command_t	forager_bee(agent_info_t info, int map[25][30])
 		}
 	}
 	flower = find_closest_flower(info, map);
-	int opponent = info.player ^ 1;
 	int	flower_dir = direction_to_target(info, flower);
 	int	wall_dir = find_neighbour(info, WALL);
-	if (wall_dir >= 0 && (wall_dir == flower_dir || flower_dir == find_neighbour(info, hive_cell(info.player))
-	|| flower_dir == find_neighbour(info, bee_cell(opponent, 0)))) /*DO WE NEED TO CHECK FOR EMPTY ROUTE?*/
+	if (wall_dir >= 0 && are_you_stuck(info, flower_dir) == -1)
 		// && is_target_near(info, hive_cell(info.player)) == 1)
 	{
 		return (command_t) {

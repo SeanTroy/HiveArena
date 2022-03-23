@@ -6,7 +6,7 @@
 /*   By: plehtika <plehtika@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 11:06:54 by plehtika          #+#    #+#             */
-/*   Updated: 2022/03/22 15:14:58 by plehtika         ###   ########.fr       */
+/*   Updated: 2022/03/23 18:40:20 by plehtika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,6 +250,17 @@ int	check_empty_direction(agent_info_t info, int direction)
 
 int	direction_to_target(agent_info_t info, coords_t target)
 {
+	if (info.turn > 1500)
+	{
+	if (info.row > 15 && info.col > 22 && target.row < 10 && target.col > 22)
+		return (NW);
+	if (info.row < 10 && info.col > 22 && target.row > 15 && target.col > 22)
+		return (SW);
+	if (info.row > 15 && info.col < 7 && target.row < 10 && target.col < 7)
+		return (NE);
+	if (info.row < 10 && info.col < 7 && target.row > 15 && target.col < 7)
+		return (SE);
+	}
 	if (info.row < target.row && info.col < target.col)
 		return (SE);
 	if (info.row < target.row && info.col == target.col)
@@ -277,29 +288,75 @@ command_t	forager_bee(agent_info_t info, int map[25][30])
 	{
 		if (info.player == 0)
 		{
-			if (info.turn < 40)
+			// if (info.turn < 40)
+			// 	return (command_t) {
+			// 		.action = MOVE,
+			// 		.direction = check_empty_direction(info, NE)
+			// 	};
+			// if (info.turn < 70)
+			// 	return (command_t) {
+			// 		.action = MOVE,
+			// 		.direction = check_empty_direction(info, NW)
+			// 	};
+			if (info.turn > 150)
+			{
+				coords_t	wallblocker = {
+							.row = 11,
+							.col = 2
+							};
+				if (info.row != 11 || info.col != 2)
+					return (command_t) {
+						.action = MOVE,
+						.direction = check_empty_direction(info, direction_to_target(info, wallblocker))
+					};
+				if (map[10][3] == WALL)
+				{
+					return (command_t) {
+							.action = GUARD,
+							.direction = NE
+						};
+				}
 				return (command_t) {
-					.action = MOVE,
-					.direction = check_empty_direction(info, NE)
-				};
-			if (info.turn < 70)
-				return (command_t) {
-					.action = MOVE,
-					.direction = check_empty_direction(info, NW)
-				};
+						.action = GUARD,
+						.direction = N
+					};
+			}
 		}
 		if (info.player == 1)
 		{
-			if (info.turn < 40)
+			// if (info.turn < 40)
+			// 	return (command_t) {
+			// 		.action = MOVE,
+			// 		.direction = check_empty_direction(info, NW)
+			// 	};
+			// if (info.turn < 70)
+			// 	return (command_t) {
+			// 		.action = MOVE,
+			// 		.direction = check_empty_direction(info, NE)
+			// 	};
+			if (info.turn > 150)
+			{
+				coords_t	wallblocker = {
+							.row = 11,
+							.col = 27
+							};
+				if (info.row != 11 || info.col != 27)
+					return (command_t) {
+						.action = MOVE,
+						.direction = check_empty_direction(info, direction_to_target(info, wallblocker))
+					};
+				if (map[10][26] == WALL)
+				{
+					return (command_t) {
+							.action = GUARD,
+							.direction = NW
+						};
+				}
 				return (command_t) {
-					.action = MOVE,
-					.direction = check_empty_direction(info, NW)
-				};
-			if (info.turn < 70)
-				return (command_t) {
-					.action = MOVE,
-					.direction = check_empty_direction(info, NE)
-				};
+						.action = GUARD,
+						.direction = N
+					};
+			}
 		}
 	}
 	if (info.bee == 2)
@@ -525,8 +582,16 @@ command_t	builder_bee(agent_info_t info, int map[25][30])
 		.action = GUARD,
 		.direction = enemy_bee
 	};
+	int opponent_hive = find_neighbour(info, hive_cell(opponent));
+	if (opponent_hive != -1)
+	{
+		return (command_t) {
+		.action = MOVE,
+		.direction = find_neighbour(info, hive_cell(opponent))
+		};
+	}
 	return (command_t) {
-	.action = MOVE,
-	.direction = find_neighbour(info, hive_cell(opponent))
+		.action = MOVE,
+		.direction = rand () % 8
 	};
 }

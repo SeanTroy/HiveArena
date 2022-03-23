@@ -6,7 +6,7 @@
 /*   By: plehtika <plehtika@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 10:49:36 by plehtika          #+#    #+#             */
-/*   Updated: 2022/03/17 11:05:31 by plehtika         ###   ########.fr       */
+/*   Updated: 2022/03/23 17:33:33 by plehtika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,11 @@ int	is_target_reserved(int target_row, int target_col, agent_info_t info, target
 			return (1);
 		i++;
 	}
-	reserved->row[info.bee] = target_row;
-	reserved->col[info.bee] = target_col;
+	if (info.bee != 0)
+	{
+		reserved->row[info.bee] = target_row;
+		reserved->col[info.bee] = target_col;
+	}
 	return (0);
 }
 
@@ -36,14 +39,29 @@ coords_t	find_opponent_hive(agent_info_t info)
 	if (info.player == 1)
 	{
 		hive.row = 12;
-		hive.col = 1;
+		hive.col = 3;
 	}
 	if (info.player == 0)
 	{
 		hive.row = 12;
-		hive.col = 28;
+		hive.col = 26;
 	}
 	return (hive);
+}
+
+int	forbidden_flowers(agent_info_t info, int row, int col)
+{
+	if (info.player == 0)
+	{
+		if ((row == 10 || row == 11 || row == 12) && col == 3)
+			return (-1);
+	}
+	if (info.player == 1)
+	{
+		if ((row == 10 || row == 11 || row == 12) && col == 26)
+			return (-1);
+	}
+	return (1);
 }
 
 coords_t	find_closest_empty(agent_info_t info, int map[25][30], target_t	reserved)
@@ -116,7 +134,7 @@ coords_t	find_closest_flower(agent_info_t info, int map[25][30])
 	// 		reserved.col[info.bee] = -1;
 	// 	}
 	// }
-	while (distance < 12)
+	while (distance < 15)
 	{
 		while (i <= distance)
 		{
@@ -124,6 +142,7 @@ coords_t	find_closest_flower(agent_info_t info, int map[25][30])
 			{
 				if (info.row + i >= 0 && info.row + i < 25
 				&& info.col + j >= 0 && info.col + j < 30
+				&& forbidden_flowers(info, info.row + i, info.col + j) == 1
 				&& map[info.row + i][info.col + j] == FLOWER
 				&& is_target_reserved(info.row + i, info.col + j, info, &reserved) == 0)
 					return (coords_t) {

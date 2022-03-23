@@ -6,7 +6,7 @@
 /*   By: plehtika <plehtika@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 10:50:41 by plehtika          #+#    #+#             */
-/*   Updated: 2022/03/22 16:06:31 by plehtika         ###   ########.fr       */
+/*   Updated: 2022/03/23 17:08:54 by plehtika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,39 @@ int	find_neighbour(agent_info_t info, cell_t type)
 		if (neighbour == type)
 		{
 			return (dir);
+		}
+	}
+	return (-1);
+}
+
+int	check_flower_location(agent_info_t info, int direction)
+{
+	coords_t	center = {info.row, info.col};
+	coords_t	flower = direction_to_coords(center, direction);
+	if (info.player == 0 && info.bee != 0
+	&& (flower.row == 10 || flower.row == 11 || flower.row == 12) && flower.col == 3)
+		return (-1);
+	if (info.player == 1 && info.bee != 0
+	&& (flower.row == 10 || flower.row == 11 || flower.row == 12) && flower.col == 26)
+		return (-1);
+	return (1);
+}
+
+int	find_neighbour_goal_spot(agent_info_t info, int map[25][30])
+{
+	coords_t	center = {info.row, info.col};
+
+	for (int dir = 0; dir < 8; dir++)
+	{
+		coords_t	coords = direction_to_coords(center, dir);
+		if (coords.row >= 0 && coords.row < 25 && coords.col >= 0
+			&& coords.col < 30)
+		{
+			int	neighbour = map[coords.row][coords.col];
+			if (neighbour == -2)
+			{
+				return (dir);
+			}
 		}
 	}
 	return (-1);
@@ -51,15 +84,25 @@ coords_t	get_home_hive(agent_info_t info)
 {
 	coords_t	hive;
 
-	if (info.player == 0)
+	if (info.player == 0 && (info.turn < 150 || info.bee == 0))
 	{
 		hive.row = 11;
 		hive.col = 2;
 	}
-	if (info.player == 1)
+	if (info.player == 0 && info.turn >= 150 && info.bee != 0)
+	{
+		hive.row = 10;
+		hive.col = 3;
+	}
+	if (info.player == 1 && (info.turn < 150 || info.bee == 0))
 	{
 		hive.row = 11;
 		hive.col = 27;
+	}
+	if (info.player == 1 && info.turn >= 150 && info.bee != 0)
+	{
+		hive.row = 10;
+		hive.col = 26;
 	}
 	return (hive);
 }
@@ -404,10 +447,18 @@ command_t	think(agent_info_t info)
 				.direction = hive_dir
 			};
 		}
-		command_t	end_game = end_game_moves(info, map);
-		if ((int)end_game.direction != -1)
-			return (end_game);
+		// command_t	end_game = end_game_moves(info, map);
+		// if ((int)end_game.direction != -1)
+		// 	return (end_game);
 		coords_t	home_hive = get_home_hive(info);
+		int	goal_spot = find_neighbour_goal_spot(info, map);
+		if ((info.bee == 2 || info.bee == 4) && goal_spot != -1)
+		{
+			return (command_t) {
+				.action = FORAGE,
+				.direction = goal_spot
+			};
+		}
 		int opponent = info.player ^ 1;
 		hive_dir = direction_to_target(info, home_hive);
 		int	wall_dir = find_neighbour(info, WALL);
@@ -424,10 +475,10 @@ command_t	think(agent_info_t info)
 			.direction = check_empty_direction(info, hive_dir)
 		};
 	}
-	else if (info.turn > 70)
+	else if (info.turn > 70 || info.bee == 0)
 	{
 		int	flower_dir = find_neighbour(info, FLOWER);
-		if (flower_dir >= 0)
+		if (flower_dir >= 0 && check_flower_location(info, flower_dir) != -1)
 		{
 			if (info.bee == 0 || info.bee == 2 || info.bee == 4)
 				return (command_t) {

@@ -6,11 +6,21 @@
 /*   By: plehtika <plehtika@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 11:06:54 by plehtika          #+#    #+#             */
-/*   Updated: 2022/03/23 18:40:20 by plehtika         ###   ########.fr       */
+/*   Updated: 2022/03/24 11:55:13 by plehtika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/deep_blue_c.h"
+
+int	is_builder_spot_blocked(agent_info_t info, int map[25][30], coords_t spot)
+{
+	int	wall_dir = find_neighbour(info, WALL);
+
+	if (map[spot.row][spot.col] == WALL && wall_dir >= 0)
+		return (wall_dir);
+	else
+		return (-1);
+}
 
 int	find_neighbour_wall_spot(agent_info_t info, int map[25][30])
 {
@@ -564,6 +574,17 @@ command_t	builder_bee(agent_info_t info, int map[25][30])
 		}
 	}
 	builder_spot = find_builder_spot(info);
+	if (builder_spot.row != -1)
+	{
+		int	block_wall_dir = is_builder_spot_blocked(info, map, builder_spot);
+		if (block_wall_dir != -1)
+		{
+			return (command_t) {
+			.action = GUARD,
+			.direction = block_wall_dir
+			};
+		}
+	}
 	if (builder_spot.row != -1)
 		return (command_t) {
 		.action = MOVE,

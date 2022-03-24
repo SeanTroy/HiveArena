@@ -6,7 +6,7 @@
 /*   By: plehtika <plehtika@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 11:03:18 by plehtika          #+#    #+#             */
-/*   Updated: 2022/03/23 15:28:08 by plehtika         ###   ########.fr       */
+/*   Updated: 2022/03/24 16:47:04 by plehtika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	initialize_map(int map[25][30])
 
 void	mask_opponent_hive(int map[25][30], agent_info_t info)
 {
+	int opponent = info.player ^ 1;
 	if (info.player == 0)
 	{
 		// if (map[10][27] == EMPTY || map[10][27] == OUTSIDE)
@@ -58,8 +59,10 @@ void	mask_opponent_hive(int map[25][30], agent_info_t info)
 		// 	map[14][28] = WALLSPOT;
 		// if (map[14][29] == EMPTY || map[14][29] == OUTSIDE)
 		// 	map[14][29] = WALLSPOT;
-		if (map[10][3] == EMPTY && info.turn > 200)
-			map[10][3] = -2;
+		if (map[14][3] == EMPTY && info.turn > 200)
+			map[14][3] = -2;
+		if (map[14][3] == -2 && info.turn > 400 && is_target_near(info, bee_cell(opponent, 0)) != 1)
+			map[14][3] = EMPTY;
 		return;
 	}
 	else /* if (info.player == 1) */
@@ -90,8 +93,10 @@ void	mask_opponent_hive(int map[25][30], agent_info_t info)
 		// 	map[14][1] = WALLSPOT;
 		// if (map[14][2] == EMPTY || map[14][2] == OUTSIDE)
 		// 	map[14][2] = WALLSPOT;
-		if (map[10][26] == EMPTY && info.turn > 200)
-			map[10][26] = -2;
+		if (map[14][26] == EMPTY && info.turn > 200)
+			map[14][26] = -2;
+		if (map[14][26] == -2 && info.turn > 400 && is_target_near(info, bee_cell(opponent, 0)) != 1)
+			map[14][26] = EMPTY;
 		return;
 	}
 }

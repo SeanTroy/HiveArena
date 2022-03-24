@@ -6,7 +6,7 @@
 /*   By: plehtika <plehtika@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 10:49:36 by plehtika          #+#    #+#             */
-/*   Updated: 2022/03/23 17:33:33 by plehtika         ###   ########.fr       */
+/*   Updated: 2022/03/24 16:51:29 by plehtika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,12 @@ int	forbidden_flowers(agent_info_t info, int row, int col)
 {
 	if (info.player == 0)
 	{
-		if ((row == 10 || row == 11 || row == 12) && col == 3)
+		if ((row == 12 || row == 13 || row == 14) && col == 3)
 			return (-1);
 	}
 	if (info.player == 1)
 	{
-		if ((row == 10 || row == 11 || row == 12) && col == 26)
+		if ((row == 12 || row == 13 || row == 14) && col == 26)
 			return (-1);
 	}
 	return (1);

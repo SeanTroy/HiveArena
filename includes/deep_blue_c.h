@@ -6,7 +6,7 @@
 /*   By: plehtika <plehtika@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 08:59:32 by plehtika          #+#    #+#             */
-/*   Updated: 2022/03/21 17:09:06 by plehtika         ###   ########.fr       */
+/*   Updated: 2022/03/24 17:56:42 by plehtika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ int			direction_to_target(agent_info_t info, coords_t target);
 int			check_empty_direction(agent_info_t info, int direction);
 int			is_target_reserved(int target_row, int target_col, agent_info_t info, target_t *reserved);
 int			find_neighbour(agent_info_t info, cell_t type);
-int		is_target_near(agent_info_t info, cell_t type);
+int			is_target_near(agent_info_t info, cell_t type);
+int			is_target_near2(agent_info_t info, cell_t type, cell_t enemybee);
+int			are_you_stuck(agent_info_t info, int direction);
 
 #endif

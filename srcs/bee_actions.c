@@ -6,7 +6,7 @@
 /*   By: plehtika <plehtika@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 11:06:54 by plehtika          #+#    #+#             */
-/*   Updated: 2022/03/24 11:55:13 by plehtika         ###   ########.fr       */
+/*   Updated: 2022/03/24 18:02:30 by plehtika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,15 +260,15 @@ int	check_empty_direction(agent_info_t info, int direction)
 
 int	direction_to_target(agent_info_t info, coords_t target)
 {
-	if (info.turn > 1500)
+	if (info.turn > 1000)
 	{
-	if (info.row > 15 && info.col > 22 && target.row < 10 && target.col > 22)
+	if (info.row > 12 && info.col > 22 && target.row <= 12 && target.col > 22)
 		return (NW);
-	if (info.row < 10 && info.col > 22 && target.row > 15 && target.col > 22)
+	if (info.row < 12 && info.col > 22 && target.row >= 12 && target.col > 22)
 		return (SW);
-	if (info.row > 15 && info.col < 7 && target.row < 10 && target.col < 7)
+	if (info.row > 12 && info.col < 7 && target.row <= 12 && target.col < 7)
 		return (NE);
-	if (info.row < 10 && info.col < 7 && target.row > 15 && target.col < 7)
+	if (info.row < 12 && info.col < 7 && target.row >= 12 && target.col < 7)
 		return (SE);
 	}
 	if (info.row < target.row && info.col < target.col)
@@ -293,6 +293,7 @@ int	direction_to_target(agent_info_t info, coords_t target)
 command_t	forager_bee(agent_info_t info, int map[25][30])
 {
 	coords_t	flower;
+	int opponent = info.player ^ 1;
 
 	if (info.bee == 0)
 	{
@@ -308,22 +309,30 @@ command_t	forager_bee(agent_info_t info, int map[25][30])
 			// 		.action = MOVE,
 			// 		.direction = check_empty_direction(info, NW)
 			// 	};
-			if (info.turn > 150)
+			if ((info.turn > 150 && info.turn <= 400) || (info.turn > 400
+			&& (is_target_near2(info, WALL, bee_cell(opponent, 0)) == 1 || is_target_near2(info, WALL, bee_cell(opponent, 1)) == 1)))
 			{
 				coords_t	wallblocker = {
-							.row = 11,
+							.row = 13,
 							.col = 2
 							};
-				if (info.row != 11 || info.col != 2)
+				if (info.row != 13 || info.col != 2)
 					return (command_t) {
 						.action = MOVE,
 						.direction = check_empty_direction(info, direction_to_target(info, wallblocker))
 					};
-				if (map[10][3] == WALL)
+				if (map[14][3] == WALL)
 				{
 					return (command_t) {
 							.action = GUARD,
 							.direction = NE
+						};
+				}
+				if (map[13][1] == EMPTY)
+				{
+					return (command_t) {
+							.action = BUILD,
+							.direction = W
 						};
 				}
 				return (command_t) {
@@ -344,22 +353,30 @@ command_t	forager_bee(agent_info_t info, int map[25][30])
 			// 		.action = MOVE,
 			// 		.direction = check_empty_direction(info, NE)
 			// 	};
-			if (info.turn > 150)
+			if ((info.turn > 150 && info.turn <= 400) || (info.turn > 400
+			&& (is_target_near2(info, WALL, bee_cell(opponent, 0)) == 1 || is_target_near2(info, WALL, bee_cell(opponent, 1)) == 1)))
 			{
 				coords_t	wallblocker = {
-							.row = 11,
+							.row = 13,
 							.col = 27
 							};
-				if (info.row != 11 || info.col != 27)
+				if (info.row != 13 || info.col != 27)
 					return (command_t) {
 						.action = MOVE,
 						.direction = check_empty_direction(info, direction_to_target(info, wallblocker))
 					};
-				if (map[10][26] == WALL)
+				if (map[14][26] == WALL)
 				{
 					return (command_t) {
 							.action = GUARD,
 							.direction = NW
+						};
+				}
+				if (map[13][28] == EMPTY)
+				{
+					return (command_t) {
+							.action = BUILD,
+							.direction = E
 						};
 				}
 				return (command_t) {
@@ -367,6 +384,25 @@ command_t	forager_bee(agent_info_t info, int map[25][30])
 						.direction = N
 					};
 			}
+		}
+	}
+	if (info.bee == 1)
+	{
+		if (info.player == 0)
+		{
+			if (info.turn < 10 && map[11][1] == EMPTY)
+				return (command_t) {
+					.action = BUILD,
+					.direction = W
+				};
+		}
+		if (info.player == 1)
+		{
+			if (info.turn < 10 && map[11][28] == EMPTY)
+				return (command_t) {
+					.action = BUILD,
+					.direction = E
+				};
 		}
 	}
 	if (info.bee == 2)

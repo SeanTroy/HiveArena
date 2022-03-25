@@ -6,7 +6,7 @@
 /*   By: plehtika <plehtika@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 10:50:41 by plehtika          #+#    #+#             */
-/*   Updated: 2022/03/24 18:19:50 by plehtika         ###   ########.fr       */
+/*   Updated: 2022/03/25 10:33:24 by plehtika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,12 +109,12 @@ coords_t	get_home_hive(agent_info_t info, int map[25][30])
 {
 	coords_t	hive;
 
-	if (info.player == 0 && (info.turn < 150 || info.bee == 0))
+	if (info.player == 0 && (info.turn < 200 || info.bee == 0))
 	{
 		hive.row = 13;
 		hive.col = 2;
 	}
-	if (info.player == 0 && info.turn >= 150 && info.bee != 0)
+	if (info.player == 0 && info.turn >= 200 && info.bee != 0)
 	{
 		hive.row = 14;
 		hive.col = 3;
@@ -124,12 +124,12 @@ coords_t	get_home_hive(agent_info_t info, int map[25][30])
 		hive.row = 13;
 		hive.col = 2;
 	}
-	if (info.player == 1 && (info.turn < 150 || info.bee == 0))
+	if (info.player == 1 && (info.turn < 200 || info.bee == 0))
 	{
 		hive.row = 13;
 		hive.col = 27;
 	}
-	if (info.player == 1 && info.turn >= 150 && info.bee != 0)
+	if (info.player == 1 && info.turn >= 200 && info.bee != 0)
 	{
 		hive.row = 14;
 		hive.col = 26;

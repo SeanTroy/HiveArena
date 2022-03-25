@@ -6,7 +6,7 @@
 /*   By: plehtika <plehtika@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 10:49:36 by plehtika          #+#    #+#             */
-/*   Updated: 2022/03/24 16:51:29 by plehtika         ###   ########.fr       */
+/*   Updated: 2022/03/25 10:30:05 by plehtika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,11 @@ int	is_target_reserved(int target_row, int target_col, agent_info_t info, target
 	int	i;
 
 	i = 0;
+	if (info.turn > 150 && info.turn <= 160)
+	{
+		reserved->row[0] = -1;
+		reserved->col[0] = -1;
+	}
 	while (i < 5)
 	{
 		if (target_row == reserved->row[i] && target_col == reserved->col[i]
@@ -24,11 +29,8 @@ int	is_target_reserved(int target_row, int target_col, agent_info_t info, target
 			return (1);
 		i++;
 	}
-	if (info.bee != 0)
-	{
-		reserved->row[info.bee] = target_row;
-		reserved->col[info.bee] = target_col;
-	}
+	reserved->row[info.bee] = target_row;
+	reserved->col[info.bee] = target_col;
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: plehtika <plehtika@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 10:50:41 by plehtika          #+#    #+#             */
-/*   Updated: 2022/03/25 10:58:05 by plehtika         ###   ########.fr       */
+/*   Updated: 2022/03/25 11:22:54 by plehtika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -509,7 +509,7 @@ command_t	think(agent_info_t info)
 			.direction = check_empty_direction(info, hive_dir)
 		};
 	}
-	else if (info.turn > 70 || info.bee == 0 || info.bee == 1 || info.bee == 3)
+	else if (info.turn > 70 || info.bee == 0 || info.bee == 3)
 	{
 		int	flower_dir = find_neighbour(info, FLOWER);
 		if (flower_dir >= 0 && check_flower_location(info, flower_dir) != -1)

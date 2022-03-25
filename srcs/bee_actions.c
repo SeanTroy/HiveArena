@@ -6,7 +6,7 @@
 /*   By: plehtika <plehtika@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 11:06:54 by plehtika          #+#    #+#             */
-/*   Updated: 2022/03/24 18:02:30 by plehtika         ###   ########.fr       */
+/*   Updated: 2022/03/25 11:22:00 by plehtika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -299,16 +299,6 @@ command_t	forager_bee(agent_info_t info, int map[25][30])
 	{
 		if (info.player == 0)
 		{
-			// if (info.turn < 40)
-			// 	return (command_t) {
-			// 		.action = MOVE,
-			// 		.direction = check_empty_direction(info, NE)
-			// 	};
-			// if (info.turn < 70)
-			// 	return (command_t) {
-			// 		.action = MOVE,
-			// 		.direction = check_empty_direction(info, NW)
-			// 	};
 			if ((info.turn > 150 && info.turn <= 400) || (info.turn > 400
 			&& (is_target_near2(info, WALL, bee_cell(opponent, 0)) == 1 || is_target_near2(info, WALL, bee_cell(opponent, 1)) == 1)))
 			{
@@ -343,16 +333,6 @@ command_t	forager_bee(agent_info_t info, int map[25][30])
 		}
 		if (info.player == 1)
 		{
-			// if (info.turn < 40)
-			// 	return (command_t) {
-			// 		.action = MOVE,
-			// 		.direction = check_empty_direction(info, NW)
-			// 	};
-			// if (info.turn < 70)
-			// 	return (command_t) {
-			// 		.action = MOVE,
-			// 		.direction = check_empty_direction(info, NE)
-			// 	};
 			if ((info.turn > 150 && info.turn <= 400) || (info.turn > 400
 			&& (is_target_near2(info, WALL, bee_cell(opponent, 0)) == 1 || is_target_near2(info, WALL, bee_cell(opponent, 1)) == 1)))
 			{
@@ -395,6 +375,16 @@ command_t	forager_bee(agent_info_t info, int map[25][30])
 					.action = BUILD,
 					.direction = W
 				};
+			if (info.turn < 40)
+				return (command_t) {
+					.action = MOVE,
+					.direction = check_empty_direction(info, NE)
+				};
+			if (info.turn < 70)
+				return (command_t) {
+					.action = MOVE,
+					.direction = check_empty_direction(info, NW)
+				};
 		}
 		if (info.player == 1)
 		{
@@ -402,6 +392,16 @@ command_t	forager_bee(agent_info_t info, int map[25][30])
 				return (command_t) {
 					.action = BUILD,
 					.direction = E
+				};
+			if (info.turn < 40)
+				return (command_t) {
+					.action = MOVE,
+					.direction = check_empty_direction(info, NW)
+				};
+			if (info.turn < 70)
+				return (command_t) {
+					.action = MOVE,
+					.direction = check_empty_direction(info, NE)
 				};
 		}
 	}
